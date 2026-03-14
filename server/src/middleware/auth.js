@@ -19,7 +19,7 @@ const ApiError = require("../utils/ApiError");
  *   a deleted user's token keeps working until it expires.
  *
  * After this middleware, controllers can access:
- *   req.user.id    — UUID of the authenticated user
+ *   req.user.id    — ObjectId of the authenticated user
  *   req.user.email — user's email address
  */
 const authenticate = async (req, _res, next) => {

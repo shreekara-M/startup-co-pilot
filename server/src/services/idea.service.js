@@ -209,7 +209,7 @@ async function upsertDetails(userId, ideaId, data) {
   // Verify idea ownership
   await findUserIdea(userId, ideaId);
 
-  // Stringify arrays back to JSON for SQLite storage
+  // Stringify arrays back to JSON for storage
   const competitors =
     data.competitors !== undefined
       ? JSON.stringify(data.competitors)
@@ -257,7 +257,7 @@ async function upsertDetails(userId, ideaId, data) {
 
 // ─── HELPER: Safe JSON parse ─────────────────────────────────
 //
-// competitors and teamNeeds are stored as JSON strings in SQLite.
+// competitors and teamNeeds are stored as JSON strings in MongoDB.
 // This safely parses them, returning [] if the string is invalid.
 
 function safeJsonParse(str) {

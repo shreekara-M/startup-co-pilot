@@ -11,7 +11,7 @@ async function start() {
   const server = app.listen(config.port, () => {
     logger.info(`Server running on http://localhost:${config.port}`);
     logger.info(`Environment: ${config.env}`);
-    logger.info(`Database: SQLite (prisma/dev.db)`);
+    logger.info(`Database: MongoDB`);
     logger.info(`Health check: http://localhost:${config.port}/health`);
   });
 

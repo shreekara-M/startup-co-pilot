@@ -1,25 +1,25 @@
 // ─── Prisma Schema for Startup Co-Pilot ────────────────────────
 //
-// Database:  SQLite (local dev) — swap to PostgreSQL with one line
+// Database:  MongoDB
 // Tables:    6
-// Run:       npx prisma migrate dev --name init
+// Run:       npx prisma db push
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 // ─── 1. USERS ──────────────────────────────────────────────────
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String   @unique
-  password  String // bcrypt hash — never returned in API
+  password  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -32,11 +32,11 @@ model User {
 // ─── 2. STARTUP IDEAS ──────────────────────────────────────────
 
 model StartupIdea {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @map("user_id") @db.ObjectId
   title     String
-  pitch     String? // elevator pitch, optional
-  status    String   @default("draft") // draft | active | archived
+  pitch     String?
+  status    String   @default("draft")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -51,17 +51,17 @@ model StartupIdea {
 // ─── 3. STARTUP DETAILS (1:1 with idea) ────────────────────────
 
 model StartupDetails {
-  id             String   @id @default(uuid())
-  ideaId         String   @unique @map("idea_id")
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  ideaId         String   @unique @map("idea_id") @db.ObjectId
   problem        String?
   solution       String?
   targetAudience String?  @map("target_audience")
   uniqueValue    String?  @map("unique_value")
   revenueModel   String?  @map("revenue_model")
   marketSize     String?  @map("market_size")
-  competitors    String   @default("[]") // JSON string
-  teamNeeds      String   @default("[]") @map("team_needs") // JSON string
-  budget         Float? // estimated cost
+  competitors    String   @default("[]")
+  teamNeeds      String   @default("[]") @map("team_needs")
+  budget         Float?
   updatedAt      DateTime @updatedAt @map("updated_at")
 
   idea StartupIdea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
@@ -72,14 +72,14 @@ model StartupDetails {
 // ─── 4. MILESTONES (roadmap phases) ────────────────────────────
 
 model Milestone {
-  id          String   @id @default(uuid())
-  ideaId      String   @map("idea_id")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  ideaId      String   @map("idea_id") @db.ObjectId
   title       String
   description String?
-  phase       String   @default("mvp") // mvp | v1 | v2 | future
+  phase       String   @default("mvp")
   sortOrder   Int      @default(0) @map("sort_order")
-  status      String   @default("pending") // pending | in_progress | completed
-  targetDate  String?  @map("target_date") // ISO date string
+  status      String   @default("pending")
+  targetDate  String?  @map("target_date")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -92,11 +92,11 @@ model Milestone {
 // ─── 5. TASKS (work items inside milestones) ───────────────────
 
 model Task {
-  id          String   @id @default(uuid())
-  milestoneId String   @map("milestone_id")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  milestoneId String   @map("milestone_id") @db.ObjectId
   title       String
-  status      String   @default("todo") // todo | in_progress | done
-  priority    String   @default("medium") // low | medium | high
+  status      String   @default("todo")
+  priority    String   @default("medium")
   sortOrder   Int      @default(0) @map("sort_order")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -109,10 +109,10 @@ model Task {
 // ─── 6. EXPORT HISTORY (audit log) ─────────────────────────────
 
 model ExportHistory {
-  id        String   @id @default(uuid())
-  ideaId    String   @map("idea_id")
-  userId    String   @map("user_id")
-  format    String   @default("pdf") // pdf (extensible later)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  ideaId    String   @map("idea_id") @db.ObjectId
+  userId    String   @map("user_id") @db.ObjectId
+  format    String   @default("pdf")
   createdAt DateTime @default(now()) @map("created_at")
 
   idea StartupIdea @relation(fields: [ideaId], references: [id], onDelete: Cascade)

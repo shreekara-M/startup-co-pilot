@@ -9,26 +9,29 @@ const router = Router({ mergeParams: true });
 
 router.use(authenticate);
 
+// ─── MongoDB ObjectId validator ─────────────────────────
+const objectId = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ID");
+
 // ─── Param Schemas ──────────────────────────────────────
 
 const ideaParam = {
   params: z.object({
-    id: z.string().uuid(),
+    id: objectId,
   }),
 };
 
 const milestoneParam = {
   params: z.object({
-    id: z.string().uuid(),
-    milestoneId: z.string().uuid(),
+    id: objectId,
+    milestoneId: objectId,
   }),
 };
 
 const taskParam = {
   params: z.object({
-    id: z.string().uuid(),
-    milestoneId: z.string().uuid(),
-    taskId: z.string().uuid(),
+    id: objectId,
+    milestoneId: objectId,
+    taskId: objectId,
   }),
 };
 

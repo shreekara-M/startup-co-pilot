@@ -7,7 +7,8 @@
       "Bash(IDEA_ID=\"a8c17bb4-361b-4526-821d-b76517491aab\")",
       "Bash(__NEW_LINE_cd801654fb696404__ echo \"=== TEST 21: GET idea with details ===\")",
       "Bash(node -e:*)",
-      "Bash(__NEW_LINE_702b0d5145e7ced1__ curl -s http://localhost:5000/api/ideas/$IDEA_ID -H \"Authorization: Bearer $TOKEN\")"
+      "Bash(__NEW_LINE_702b0d5145e7ced1__ curl -s http://localhost:5000/api/ideas/$IDEA_ID -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(npx prisma:*)"
     ]
   }
 }

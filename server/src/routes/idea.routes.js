@@ -9,11 +9,14 @@ const router = Router();
 // All idea routes require login
 router.use(authenticate);
 
+// ─── MongoDB ObjectId validator ─────────────────────────
+const objectId = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ID");
+
 // ─── Validation Schemas ─────────────────────────────────
 
 const idParam = {
   params: z.object({
-    id: z.string().uuid("Invalid idea ID"),
+    id: objectId,
   }),
 };
 

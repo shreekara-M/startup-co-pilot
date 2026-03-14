@@ -11,8 +11,10 @@ router.use(authenticate);
 
 // ─── Validation ─────────────────────────────────────────
 
+const objectId = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ID");
+
 const logExportSchema = {
-  params: z.object({ id: z.string().uuid() }),
+  params: z.object({ id: objectId }),
   body: z.object({
     format: z.enum(["pdf"]).default("pdf"),
   }),

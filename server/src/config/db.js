@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
 async function connectDB() {
   try {
     await prisma.$connect();
-    logger.info("SQLite database connected");
+    logger.info("MongoDB database connected");
   } catch (error) {
     logger.error("Database connection failed: " + error.message);
     process.exit(1);
